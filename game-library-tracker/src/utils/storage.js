@@ -1,5 +1,6 @@
 const GAMES_STORAGE_KEY = 'game-library-tracker-games';
 const USER_STORAGE_KEY = 'game-library-tracker-user';
+const AUTH_STORAGE_KEY = 'game-library-auth-user';
 
 export const loadGamesFromStorage = () => {
   try {
@@ -44,5 +45,28 @@ export const saveUserProfileToStorage = (profile) => {
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(profile));
   } catch (error) {
     console.error('Failed to save user profile to localStorage:', error);
+  }
+};
+
+export const loadAuthFromStorage = () => {
+  try {
+    const savedAuth = localStorage.getItem(AUTH_STORAGE_KEY);
+
+    if (!savedAuth) {
+      return null;
+    }
+
+    return JSON.parse(savedAuth);
+  } catch (error) {
+    console.error('Failed to load auth from localStorage:', error);
+    return null;
+  }
+};
+
+export const saveAuthToStorage = (authState) => {
+  try {
+    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authState));
+  } catch (error) {
+    console.error('Failed to save auth to localStorage:', error);
   }
 };

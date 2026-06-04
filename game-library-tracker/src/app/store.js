@@ -4,6 +4,7 @@ import filtersReducer from '../features/filters/model/filtersSlice';
 import notificationReducer from '../features/notifications/model/notificationSlice';
 import userReducer from '../features/user/model/userSlice';
 import themeReducer from '../features/theme/model/themeSlice';
+import authReducer from '../features/auth/model/authSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     notification: notificationReducer,
     user: userReducer,
     theme: themeReducer,
+    auth: authReducer,
   },
 });

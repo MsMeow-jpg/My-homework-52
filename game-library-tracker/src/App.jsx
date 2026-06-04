@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ThemeSwitcher from './components/ThemeSwitcher';
+import { logoutUser } from './features/auth/model/authSlice';
 import Notification from './features/notifications/components/Notification';
 import { fetchGames } from './features/games/model/gamesSlice';
+import { showNotification } from './features/notifications/model/notificationSlice';
 import {
+  saveAuthToStorage,
   saveGamesToStorage,
   saveUserProfileToStorage,
 } from './utils/storage';
+import AuthPage from './pages/AuthPage';
 import DashboardPage from './pages/DashboardPage';
 import LibraryPage from './pages/LibraryPage';
 import ProfilePage from './pages/ProfilePage';
@@ -20,6 +24,7 @@ function App() {
   );
   const profile = useSelector((state) => state.user.profile);
   const currentTheme = useSelector((state) => state.theme.currentTheme);
+  const auth = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(fetchGames());
@@ -38,6 +43,31 @@ function App() {
   useEffect(() => {
     saveUserProfileToStorage(profile);
   }, [profile]);
+
+  useEffect(() => {
+    saveAuthToStorage(auth);
+  }, [auth]);
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    setActivePage('dashboard');
+
+    dispatch(
+      showNotification({
+        message: 'Logged out successfully',
+        type: 'success',
+      })
+    );
+  };
+
+  if (!auth.isAuthenticated) {
+    return (
+      <>
+        <Notification />
+        <AuthPage />
+      </>
+    );
+  }
 
   return (
     <>
@@ -75,6 +105,10 @@ function App() {
           </button>
 
           <ThemeSwitcher />
+
+          <button type="button" className="logout-button" onClick={handleLogout}>
+            Logout
+          </button>
         </nav>
       </header>
 
